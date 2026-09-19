@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Hub · Abby's Learning OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FFFDF8;--ink:#2C2420;--muted:#9A8C7C;--line:#DDD0BC;--clay:#C97A5C;--margin:#EFC8C0;--sage:#7E9072;--sage-soft:#EEF2E9}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;overflow-x:hidden}
+body{font-family:"Noto Sans TC",sans-serif;background:#EDE4D2;color:var(--ink);-webkit-font-smoothing:antialiased}
+.page{background:var(--paper);width:min(100vw,560px);min-height:100vh;margin:0 auto;padding:44px 40px 80px 54px;position:relative;box-shadow:2px 0 24px rgba(0,0,0,.06),-2px 0 24px rgba(0,0,0,.04);overflow:hidden}
+.page::before{content:"";position:absolute;left:34px;top:0;bottom:0;width:1.5px;background:var(--margin);opacity:.65}
+.top-bar{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.top-month{font-family:"Fraunces",serif;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--clay)}
+.top-year{font-family:"Fraunces",serif;font-size:.7rem;letter-spacing:1px;color:var(--muted)}
+.date-block{text-align:center;padding:10px 0 22px;border-bottom:1px solid var(--line);margin-bottom:28px}
+.date-num{font-family:"Fraunces",serif;font-size:5.5rem;font-weight:300;line-height:1;color:var(--ink);letter-spacing:-4px;display:block}
+.date-wday{font-family:"Noto Serif TC",serif;font-size:.88rem;color:var(--muted);margin-top:8px;letter-spacing:.5px}
+.hero{margin-bottom:28px}
+.kicker{font-family:"Fraunces",serif;font-size:.66rem;letter-spacing:2.2px;text-transform:uppercase;color:var(--clay);margin-bottom:7px}
+.hero h1{font-family:"Noto Serif TC",serif;font-size:1.38rem;line-height:1.35;margin-bottom:9px}
+.hero p{font-size:.83rem;color:var(--muted);line-height:1.75}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:7px;margin-top:16px;padding:11px 12px;border:1px solid var(--line);background:var(--sage-soft);border-radius:12px}
+.flow-step{text-align:center}.flow-step b{display:block;font-family:"Fraunces",serif;font-size:.75rem;color:var(--sage)}.flow-step span{display:block;margin-top:2px;font-size:.66rem;color:var(--muted)}
+.flow-arr{font-family:"Fraunces",serif;color:var(--muted);font-size:.9rem}
+.idx-label{font-family:"Fraunces",serif;font-size:.65rem;letter-spacing:2.2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+a.entry{display:block;text-decoration:none;color:inherit;padding:19px 0;border-bottom:1px solid var(--line);transition:padding-left .2s ease;position:relative}
+a.entry:first-of-type{border-top:1px solid var(--line)}a.entry:hover{padding-left:8px}
+.entry-row{display:flex;align-items:flex-start;gap:13px}.entry-ord{font-family:"Fraunces",serif;font-size:.74rem;color:var(--muted);flex-shrink:0;min-width:20px;margin-top:3px;letter-spacing:.3px}
+.entry-body{flex:1;min-width:0}.entry-name{font-family:"Noto Serif TC",serif;font-size:1.06rem;font-weight:700;color:var(--ink);letter-spacing:.2px;display:block;margin-bottom:5px;transition:color .18s}
+a.entry:hover .entry-name{color:var(--clay)}.entry-role{display:inline-block;font-family:"Fraunces",serif;font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:var(--sage);margin-bottom:6px}
+.entry-desc{font-size:.83rem;color:var(--muted);line-height:1.65;margin-bottom:8px}.entry-tabs{font-family:"Fraunces",serif;font-size:.7rem;color:var(--muted);letter-spacing:.3px;opacity:.78}
+.entry-arr{font-family:"Fraunces",serif;font-size:.95rem;color:var(--muted);flex-shrink:0;margin-top:2px;transition:transform .18s,color .18s}
+a.entry:hover .entry-arr{transform:translateX(4px);color:var(--clay)}
+.foot{margin-top:38px;font-family:"Fraunces",serif;font-size:.7rem;letter-spacing:1px;color:var(--muted);text-align:center}
+@media(max-width:440px){.page{width:100vw;max-width:none;margin:0;padding:30px 18px 72px 34px;box-shadow:none}.page::before{left:22px}.date-num{font-size:4.2rem}.entry-row{gap:10px}.entry-desc{font-size:.82rem;line-height:1.6}.entry-tabs{font-size:.66rem}.flow{gap:4px;padding:10px 7px}.flow-step span{font-size:.61rem}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-bar"><span class="top-month" id="tMonth">—</span><span class="top-year" id="tYear">—</span></div>
+  <div class="date-block"><span class="date-num" id="dNum">—</span><div class="date-wday" id="dWday">—</div></div>
+
+  <section class="hero">
+    <div class="kicker">Learning OS</div>
+    <h1>Plan → Learn → Prove</h1>
+    <p>把每週重點轉成可執行的學習，留下真正能再利用的知識，並用少量正式工作累積能力證據。</p>
+    <div class="flow" aria-label="Learning OS workflow">
+      <div class="flow-step"><b>PLAN</b><span>Execution</span></div><div class="flow-arr">→</div>
+      <div class="flow-step"><b>LEARN</b><span>Knowledge</span></div><div class="flow-arr">→</div>
+      <div class="flow-step"><b>PROVE</b><span>Evidence</span></div>
+    </div>
+  </section>
+
+  <div class="idx-label">Learning System</div>
+
+  <a class="entry" href="Planner.html">
+    <div class="entry-row">
+      <span class="entry-ord">01</span>
+      <div class="entry-body">
+        <span class="entry-role">Execution</span>
+        <span class="entry-name">Weekly Planner</span>
+        <div class="entry-desc">每週執行系統——決定這週學什麼、怎麼練、何時做，整合 CMMU、English、Thai、Business、工作與生活限制。</div>
+        <div class="entry-tabs">This Week · Plan · Review · Goals · Prompts · Data</div>
+      </div><span class="entry-arr">›</span>
+    </div>
+  </a>
+
+  <a class="entry" href="Knowledge-Vault.html">
+    <div class="entry-row">
+      <span class="entry-ord">02</span>
+      <div class="entry-body">
+        <span class="entry-role">Knowledge</span>
+        <span class="entry-name">Knowledge Vault</span>
+        <div class="entry-desc">長期知識與思考系統——保存 Knowledge、Thinking、Language、Ideas、Sources、Open Questions 與 Retrieval，不把學過誤當成會了。</div>
+        <div class="entry-tabs">Home · Knowledge · Thinking · Language · Ideas · Review · Inbox · Prompts · Data</div>
+      </div><span class="entry-arr">›</span>
+    </div>
+  </a>
+
+  <a class="entry" href="Probation-Work-Log.html">
+    <div class="entry-row">
+      <span class="entry-ord">03</span>
+      <div class="entry-body">
+        <span class="entry-role">Evidence</span>
+        <span class="entry-name">Probation Work Log</span>
+        <div class="entry-desc">正式工作與能力證據——只記錄有意義的 Assignment、Submission、Manager Review、Revision、Result 與 Capability Evidence。</div>
+        <div class="entry-tabs">Assignments · Detail · Add / Edit · AI / Data</div>
+      </div><span class="entry-arr">›</span>
+    </div>
+  </a>
+
+  <div class="foot">Abby's Learning Hub.</div>
+</div>
+
+<script>
+const W=["日","月","火","水","木","金","土"];
+const M=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const n=new Date();
+document.getElementById("tMonth").textContent=M[n.getMonth()].toUpperCase();
+document.getElementById("tYear").textContent=n.getFullYear();
+document.getElementById("dNum").textContent=n.getDate();
+document.getElementById("dWday").textContent=W[n.getDay()]+"曜日";
+</script>
+</body>
+</html>

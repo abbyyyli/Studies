@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Weekly Planner · Abby's Learning OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FBF5EC;--card:#FFFCF6;--ink:#1f2937;--muted:#8D8175;--line:#EADFCF;--sage:#7E9072;--sage-soft:#E5ECDD;--clay:#C9785B;--sand:#E9C996;--shadow:0 14px 40px -22px rgba(80,60,40,.45);--r:18px}
+*{box-sizing:border-box}body{margin:0;font-family:"Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;background-image:radial-gradient(circle at 12% -5%,#fff5e3 0,transparent 45%),radial-gradient(circle at 90% 0,#eef1e4 0,transparent 40%);min-height:100vh}.wrap{max-width:980px;margin:auto;padding:26px 18px 76px}.kicker{font-family:Fraunces,serif;color:var(--clay);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px}h1,h2,h3{font-family:"Noto Serif TC",serif}h1{font-size:1.75rem;margin:2px 0}.sub,.hint,.muted{color:var(--muted)}.sub{font-size:.9rem}.home{float:right;color:var(--muted);text-decoration:none;font-size:.8rem;border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:#fff}nav{display:flex;gap:6px;margin:20px 0 18px;background:var(--card);padding:6px;border-radius:14px;border:1px solid var(--line);overflow-x:auto;position:sticky;top:0;z-index:10}nav button{flex:1;min-width:92px;border:0;background:transparent;font:500 .86rem inherit;color:var(--muted);padding:9px 6px;border-radius:10px;cursor:pointer;white-space:nowrap}nav button.on{background:var(--sage);color:#fff}.panel{display:none}.panel.on{display:block}.card,.hero{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}.hero{background:linear-gradient(135deg,#fffaf1,#eef5e8)}.heroTop,.between{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.weeknav{display:flex;gap:6px}.iconbtn,.btn{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px 12px;font-family:inherit;cursor:pointer;color:var(--ink)}.btn.primary{background:var(--sage);color:#fff;border-color:var(--sage)}.btn.clay{background:var(--clay);color:#fff;border-color:var(--clay)}.btn.small{padding:6px 9px;font-size:.76rem}.weekTitle{font-family:Fraunces,serif;font-size:1.25rem}.bigq{margin:15px 0 6px;font-family:"Noto Serif TC",serif;font-size:1.12rem}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px}.metric b{display:block;color:var(--sage);font-family:Fraunces,serif;font-size:1.15rem}.outcomes{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.outcome{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px;font-size:.86rem}.outcome.done{opacity:.55;text-decoration:line-through}.days{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}.day.today{border-color:var(--sage);box-shadow:0 0 0 2px var(--sage-soft)}.dayhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}.dayname{font-family:Fraunces,serif;font-size:1.05rem}.daydate{font-size:.72rem;color:var(--muted)}.task{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-top:1px dashed var(--line);font-size:.84rem;min-width:0}.task>span{min-width:0;overflow-wrap:anywhere}.task b{white-space:nowrap}.day{min-width:0;overflow:hidden}.tag{flex:0 0 auto}.task:first-of-type{border-top:0}.task input{margin-top:5px}.task.done span{text-decoration:line-through;color:var(--muted)}.tag{font-size:.67rem;padding:2px 7px;border-radius:999px;background:var(--sage-soft);color:#526044;white-space:nowrap}.fixed{background:#fdf3ea;color:#8a5e48}.empty{font-size:.8rem;color:var(--muted);padding:8px 0}label{display:block;color:var(--muted);font-size:.8rem;margin:11px 0 5px}input,textarea,select{width:100%;font:inherit;font-size:.88rem;border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff;color:var(--ink)}textarea{min-height:80px;resize:vertical}.editorDay{border:1px solid var(--line);border-radius:14px;padding:12px;margin:9px 0;background:#fff}.taskedit{border:1px solid var(--line);border-radius:13px;padding:10px;margin:9px 0;background:#fffaf6}
+.planrow{position:relative;padding:14px 2px;border-top:1px dashed var(--line)}
+.planrow:first-child{border-top:0}
+.planrow-view{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;border-radius:12px;padding:3px 42px 3px 0}
+.planrow-view:active{background:#fff8f2}
+.planrow-time{font-weight:700;line-height:1.45;white-space:nowrap}
+.planrow-body{min-width:0}
+.planrow-name{font-size:.98rem;line-height:1.4;overflow-wrap:anywhere}
+.planrow-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.planrow-sub{font-size:.78rem;color:var(--muted);line-height:1.4}
+.planrow-menu{position:absolute;right:0;top:12px;width:36px;height:36px;border:0;background:transparent;color:var(--muted);border-radius:10px;font-size:1.25rem;cursor:pointer}
+.planrow-menu:active{background:#f7efe7}
+.rowmenu{display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap;margin-top:9px}
+.rowmenu button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 11px;color:var(--muted);font-family:inherit}
+.rowmenu .danger{color:var(--clay);background:#fff4ef}
+.editbox{background:#fffaf6;border:1px solid var(--line);border-radius:13px;padding:12px;margin:7px 0 11px}
+.editgrid{display:grid;grid-template-columns:125px minmax(0,1fr) 120px;gap:8px}
+.editgrid .edit-note{grid-column:1/-1}
+.edit-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:9px}
+.daytools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.taskedit-main{display:grid;grid-template-columns:130px 1fr 120px;gap:7px;align-items:center}
+.taskedit-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:7px}
+.taskedit-actions button{width:auto;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:9px;padding:5px 9px;cursor:pointer}
+.taskedit-actions .danger{background:#fff4ef;color:var(--clay);border-color:#f2d8cb}
+.preset-badge{font-size:.68rem;color:#8a5e48;background:#fdf3ea;padding:2px 7px;border-radius:999px;margin-left:6px}
+.daytools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.goal{border-left:3px solid var(--sage);padding:8px 12px;margin:9px 0;background:#fff;border-radius:0 12px 12px 0}.goal h3{font-size:.92rem;margin:0 0 4px}.reviewgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.checkline{display:flex;gap:8px;align-items:center;margin:7px 0}.checkline input{width:auto}.jsonbox{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem}.status{min-height:1.2em;color:var(--sage);font-size:.78rem;margin-top:7px}.note{background:#fdf3ea;border:1px dashed var(--sand);border-radius:12px;padding:11px;font-size:.8rem;color:#7a6a52}.progress{height:7px;background:#eee5d8;border-radius:999px;overflow:hidden;margin-top:6px}.progress span{display:block;height:100%;background:var(--sage)}
+@media(max-width:700px){
+.grid3,.outcomes,.days,.reviewgrid{grid-template-columns:1fr}
+.heroTop{flex-direction:column}.weeknav{align-self:stretch}.weeknav button{flex:1}
+.wrap{padding:18px 12px 60px}.daysView{min-width:0}
+.editorDay{padding:14px}.planrow{padding:14px 0}
+.planrow-view{grid-template-columns:104px minmax(0,1fr);gap:10px;padding-right:38px}
+.planrow-name{font-size:.96rem}.planrow-time{font-size:.9rem}
+.editgrid{grid-template-columns:1fr 1fr}.editgrid .edit-name,.editgrid .edit-note{grid-column:1/-1}
+.edit-actions{justify-content:stretch}.edit-actions button{flex:1}
+}.planrow{grid-template-columns:88px minmax(0,1fr) auto;gap:6px}.planrow-actions button{padding:6px}.editgrid{grid-template-columns:1fr 1fr}.editgrid .edit-name{grid-column:1/-1}.daysView{min-width:0}.taskedit-main{grid-template-columns:1fr 1fr}.taskedit-main .task-name{grid-column:1/-1;grid-row:1}.taskedit-main .task-time{grid-column:1}.taskedit-main .task-area{grid-column:2}.heroTop{flex-direction:column}.weeknav{align-self:stretch}.weeknav button{flex:1}.wrap{padding:18px 12px 60px}.editorDay{padding:11px}.taskedit-actions{justify-content:space-between}.taskedit-actions button{flex:1}.daytools .btn{padding:6px 8px}}
+.card h2{margin:0 0 10px}.card>h2+.hint{margin-top:-2px}.fixedrow{display:grid;grid-template-columns:90px 125px minmax(0,1fr) 120px 42px;gap:8px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}.fixedrow:first-child{border-top:0}.fixedrow button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px;cursor:pointer}.fixed-empty{padding:12px 0;color:var(--muted);font-size:.82rem}@media(max-width:700px){.fixedrow{grid-template-columns:82px 1fr 42px}.fixedrow .fixed-task{grid-column:1/3}.fixedrow .fixed-area{grid-column:1/3}}
+
+.fixedSettings{padding:0;overflow:hidden}.fixedSettings summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;cursor:pointer}.fixedSettings summary::-webkit-details-marker{display:none}.fixedSettings summary strong{font-family:"Noto Serif TC",serif;font-size:1.05rem}.fixedSettings summary small{display:block;color:var(--muted);font-size:.76rem;font-weight:400;margin-top:2px}.fixedSettingsBody{border-top:1px solid var(--line);padding:14px 18px 18px}.summaryMark{color:var(--muted);transition:transform .2s ease}.fixedSettings[open] .summaryMark{transform:rotate(180deg)}
+</style>
+<style>
+/* v5 This Week = execution dashboard; Plan remains unchanged */
+#daysView{display:block!important}
+.dashboardToday{background:linear-gradient(180deg,#f3f8ec,#fbfaf4);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.dashEyebrow{font-size:.7rem;letter-spacing:.09em;font-weight:700;color:var(--sage)}
+.dashboardToday h2,.dashboardCard h3{margin:.3rem 0 1rem}
+.dashList{display:grid;gap:8px}
+.dashTask{display:flex!important;align-items:flex-start!important;gap:10px!important;height:auto!important;min-height:0!important;background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px!important}
+.dashTask>input{flex:0 0 22px;width:22px;height:22px;margin-top:2px}
+.dashBody{flex:1;min-width:0}.dashTop{display:flex;justify-content:space-between;gap:8px;align-items:center}.dashTop b{font-size:.86rem}.dashName{font-weight:600;margin-top:3px;overflow-wrap:anywhere}.dashNote{font-size:.77rem;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.dashTask.done .dashName,.dashTask.done .dashNote{text-decoration:line-through;opacity:.55}
+.dashboardGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}.dashboardCard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}.dashOutcome{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-top:1px dashed var(--line)}.dashOutcome:first-of-type{border-top:0}.dashOutcome input{width:20px;height:20px;flex:0 0 20px}.dashQuestion{font-family:Georgia,serif;font-size:1.06rem;line-height:1.55}.dashStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.dashStats>div{background:#fffaf6;border:1px solid var(--line);border-radius:12px;padding:10px}.dashStats b{display:block;color:var(--sage);font-size:1.1rem}.dashStats span{font-size:.72rem;color:var(--muted)}.tomorrowItem{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:8px;align-items:center;padding:9px 0;border-top:1px dashed var(--line)}.tomorrowItem:first-of-type{border-top:0}
+@media(max-width:700px){.dashboardGrid{grid-template-columns:1fr}.dashboardToday{padding:14px}.dashboardCard{padding:14px}.tomorrowItem{grid-template-columns:76px minmax(0,1fr)}.tomorrowItem em{grid-column:2;justify-self:start}}
+.dangerZone{border-color:#e7c6b7;background:#fffaf7}.dangerZone h2{color:var(--clay)}.previewBox{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.82rem;white-space:pre-wrap}.hidden{display:none!important}
+
+/* Refined section spacing: compact without crowding */
+#plan .card > h2, #review .card > h2, #prompts .card > h2, #ai .card > h2 { margin-top: 0; margin-bottom: 7px; line-height: 1.35; }
+#plan .card > h2 + .hint, #review .card > h2 + .hint, #prompts .card > h2 + .hint { margin-top: 0; }
+#ai .card > h2 + label { margin-top: 5px; }
+#ai .card > h2 + textarea { margin-top: 5px; }
+</style>
+
+<style>
+.promptHero{background:linear-gradient(135deg,#fffaf1,#eef5e8);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}
+.promptHero h2{margin:0 0 6px}.promptGrid{display:grid;grid-template-columns:1fr;gap:12px}
+.promptCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0;overflow:hidden}
+.promptCard summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.promptCard summary::-webkit-details-marker{display:none}
+.promptCard summary strong{font-family:"Noto Serif TC",serif;font-size:.98rem}
+.promptCard summary span{color:var(--muted);font-size:.76rem}
+.promptBody{border-top:1px solid var(--line);padding:14px 16px 16px}
+.promptText{min-height:180px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem}
+.contextBox{min-height:110px}
+.promptActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.promptStatus{font-size:.78rem;color:var(--sage);min-height:1.2em;margin-top:6px}
+@media(max-width:700px){.promptHero,.promptBody{padding:14px}.promptCard summary{padding:13px 14px}}
+</style>
+</head><body><div class="wrap">
+<header><a class="home" href="index.html">← Learning Hub</a><div class="kicker">personal planning os</div><h1>Weekly Planner</h1><div class="sub">Turn priorities into an executable week. Planning is about deciding what matters, not filling every hour.</div></header>
+<nav><button class="on" data-tab="week">This Week</button><button data-tab="plan">Plan</button><button data-tab="review">Review</button><button data-tab="goals">Goals</button><button data-tab="prompts">Prompts</button><button data-tab="ai">Data</button></nav>
+<section class="panel on" id="week"><div class="hero"><div class="heroTop"><div><div class="weekTitle" id="weekRange"></div><div class="muted" id="weekLabel"></div></div><div class="weeknav"><button class="iconbtn" id="prevWeek">‹</button><button class="iconbtn" id="thisWeek">This Week</button><button class="iconbtn" id="nextWeek">›</button></div></div><div class="bigq" id="bigQView">—</div><div class="hint">Weekly Focus / Question</div><div class="outcomes" id="outcomeView"></div><div class="grid3" id="metrics" style="margin-top:12px"></div></div><div class="days" id="daysView"></div></section>
+<section class="panel" id="plan"><div class="card"><h2>Plan This Week</h2><div class="hint">Blocks are sorted by time automatically. Fixed schedule items stay simple by default; edit them only when needed.</div><label>Weekly Focus / Question</label><input id="bigQuestion" placeholder="Foundation week 可寫學習焦點；有合適問題時才寫 question"><label>Top 3 Outcomes</label><input id="out1" placeholder="Outcome 1"><input id="out2" placeholder="Outcome 2" style="margin-top:6px"><input id="out3" placeholder="Outcome 3" style="margin-top:6px"><label>Weekly Notes / Special Events</label><textarea id="weekNote"></textarea></div><details class="card fixedSettings"><summary><span><strong>Fixed Schedule</strong><small>Update only when your recurring schedule changes</small></span><span class="summaryMark">⌄</span></summary><div class="fixedSettingsBody"><div class="between"><div class="hint">Changes apply only to newly created weeks. Existing weeks stay unchanged.</div><button class="btn small" id="addFixed">Add Block</button></div><div id="fixedSchedule"></div><div class="actions"><button class="btn primary" id="saveFixed">Save Settings</button><span class="status" id="fixedStatus"></span></div></div></details><div class="card"><div class="between"><div><h2 style="margin:0">Monday–Sunday Schedule</h2><div class="hint">Add as many blocks as needed. Blocks are sorted by start time when saved.</div></div><button class="btn small" id="resetPreset">Reset Week Schedule</button></div><div id="planDays"></div><div class="actions"><button class="btn primary" id="savePlan">Save Plan</button><span class="status" id="planStatus"></span></div></div></section>
+<section class="panel" id="review"><div class="card"><h2>Weekly Review</h2><div class="hint">Keep only the information that should change next week’s teaching, practice, or resource choices.</div><div class="reviewgrid"><div><label>What I Can Explain Closed-Book</label><textarea id="rWin"></textarea></div><div><label>Biggest Blocker / What I Kept Delaying</label><textarea id="rBlock"></textarea></div><div><label>CMMU Integration / Workload / Class Notes</label><textarea id="rCmmu"></textarea></div><div><label>English / Thai Actual Output</label><textarea id="rLang"></textarea></div><div><label>Research / Evidence: Source Judgment, Gaps, Uncertainty</label><textarea id="rEvidence"></textarea></div><div><label>Delayed / Next-Day Retrieval: What Stuck, What Didn’t</label><textarea id="rRetrieval"></textarea></div><div><label>Career / Business: Likes, Dislikes, Discoveries</label><textarea id="rCareer"></textarea></div><div><label>What to Reteach / Practice / Adjust Next Week</label><textarea id="rNext"></textarea></div></div><label>Other Notes</label><textarea id="rOther"></textarea><div class="actions"><button class="btn primary" id="saveReview">Save Review</button><button class="btn" id="copyReview">Copy to ChatGPT</button><span class="status" id="reviewStatus"></span></div></div><div class="card"><h2>Weekly Summary</h2><div id="reviewAuto" class="note"></div></div></section>
+<section class="panel" id="goals"><div class="card"><h2>Goals & Direction</h2><div class="hint">Keep only the directions that should influence weekly trade-offs. Edit directly when needed.</div><div id="goalEditors"></div><div class="actions"><button class="btn primary" id="saveGoals">Save Goals</button><span class="status" id="goalStatus"></span></div></div></section>
+
+<section class="panel" id="prompts">
+  <div class="promptHero">
+    <div class="kicker">daily execution</div>
+    <h2>Daily Execution Prompt</h2>
+    <div class="hint">Paste today’s Planner blocks or day plan. This prompt asks ChatGPT to turn them into an exact, ready-to-start learning session without redesigning the whole week.</div>
+    <label>Today’s Planner Context</label>
+    <textarea id="dailyContext" class="contextBox" placeholder="Paste today’s Planner blocks, schedule, or the specific block you are about to start."></textarea>
+    <label>Prompt</label>
+    <textarea id="dailyPromptText" class="promptText"></textarea>
+    <div class="promptActions">
+      <button class="btn primary" id="copyDailyPrompt">Copy Prompt + Context</button>
+      <button class="btn" id="copyDailyPromptOnly">Copy Prompt Only</button>
+      <button class="btn" id="saveDailyPrompt">Save</button>
+      <button class="btn" id="resetDailyPrompt">Reset Default</button>
+    </div>
+    <div class="promptStatus" id="dailyPromptStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>Prompt Library</h2>
+    <div class="hint">Daily Execution stays open above. Other modes stay collapsed until needed.</div>
+    <div class="promptGrid" id="promptLibrary"></div>
+  </div>
+</section>
+
+<section class="panel" id="ai">
+<div class="card"><h2>Plan Update</h2><label>Paste JSON</label><textarea class="jsonbox" id="jsonIn" placeholder='{"week":"2026-09-21","days":{"Mon":[...]}}'></textarea><div class="actions"><button class="btn primary" id="previewMerge">Preview Merge</button><button class="btn hidden" id="confirmMerge">Confirm Merge</button><button class="btn hidden" id="cancelMerge">Cancel</button></div><div id="mergePreview" class="previewBox hidden"></div><div class="actions"><button class="btn" id="clearWeek">Clear This Week</button><button class="btn" id="exportWeek">Export Week JSON</button><button class="btn" id="exportAll">Full Backup</button><button class="btn" id="importAll">Import Backup</button></div><div class="status" id="jsonStatus"></div></div>
+
+<div class="card"><h2>Planner Prompt</h2><textarea class="jsonbox" id="plannerPrompt"></textarea><div class="actions"><button class="btn primary" id="copyPrompt">Copy Prompt</button><button class="btn" id="savePrompt">Save Prompt</button><button class="btn" id="resetPrompt">Reset Default</button></div><div class="status" id="copyStatus"></div></div>
+<div class="card dangerZone"><h2>Data Management</h2><div class="actions"><button class="btn clay" id="clearAll">Clear All Data</button></div><div class="status" id="dataStatus"></div></div>
+</section>
+</div><script>
+const KEY='abby_weekly_planner_v1'; function uid(){return 'b_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)} const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun']; const DOWZH=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const DEFAULT_FIXED={Mon:[['17:00–18:00','去 CMMU','Commute',1],['18:00–21:00','CMMU','CMMU',1],['21:00–22:00','回程','Commute',1]],Tue:[['17:00–18:00','去 CMMU','Commute',1],['18:00–21:00','CMMU','CMMU',1],['21:00–22:00','回程','Commute',1]],Wed:[['13:00–15:00','Elementary English Tutoring','Work',1],['17:00–18:00','去 CMMU','Commute',1],['18:00–21:00','CMMU','CMMU',1],['21:00–22:00','回程','Commute',1]],Thu:[['14:00–17:00','Lesson Prep','Work',1],['17:00–20:30','High-school English Tutoring','Work',1]],Fri:[['12:30–14:30','Elementary English Tutoring','Work',1]],Sat:[],Sun:[]};
+const DEFAULT_GOALS={now:{title:'Now → 3 months',text:'English × CMMU：能自然表達觀點、追問、討論與簡報。\n用 CMMU 與實際研究建立 business foundation。\n完成少量高價值 Coursera sprint，不蒐集證書。\n開始用真實任務測試 Career Thesis。'},mid:{title:'3–12 months',text:'找出值得深挖的 vertical domain。\n累積 Thailand / SEA consumer & market judgment。\n做出可展示的 market entry / commercial / new business work samples。'},one:{title:'1–3 years',text:'建立可被市場辨識、可產生決策權與 ownership 的專業能力。\n進入能累積 career capital 的角色，同時測試 owned asset。'},long:{title:'3–5+ years',text:'以泰國為主要基地，建立高收入的專業主線 + 自有資產 / 第二收入。\n保留創業選項，但以真實商業證據決定是否放大。'}};
+const DEFAULT_PROMPT=`你是我的 Weekly Planning Strategist 與 Learning Designer。請根據最新 Master Context、90-Day Workflow、Prompt Manager、上一週 Review / Work Log、CMMU / 工作 / 生活現況，規劃可執行的一週。
+
+核心原則：
+1. Planner 管 execution；Work Log 管 performance evidence。不要把 Planner 變成專案管理或能力追蹤器。
+2. Month 1 採高度 scaffolded 的 Knowledge → Evidence → Judgment；不要在 prerequisites 未建立時要求 market attractiveness、market entry 或完整 recommendation。
+3. 正式 Learning Unit 應涵蓋 Teaching → Assigned Material → Worked Example → Guided Practice → Independent Practice → Delayed Retrieval。六要素可分散在數個 blocks／數天，不必塞進單一 block。
+4. 教學當下可做 comprehension check；較獨立的 output 通常延後數小時或睡前 closed-book 完成，隔天再排 5–15 分鐘 spaced retrieval。不要把剛教完的模仿誤當 mastery 或 formal assessment。
+5. 每個問題與 output 必須符合 time budget：短時段只做 concept retrieval、單一圖表、單一 worked example 或有限來源 synthesis；需要多來源研究的問題必須給數小時或跨日，並明列 stop rule。
+6. Research 是核心技能。當週若涉及 research，正式教並練 source hierarchy、credibility、recency、triangulation、Fact / Inference / Hypothesis / Unknown、Evidence Log、missing information 與可支持到哪裡。
+7. Core learning block 的 note 優先寫成：Learning Unit element；Resource / source pack；Focus；Output/Outcome；Time budget / scope 或 stop rule；必要時 Retrieval timing。不要只寫模糊主題，也不要塞會洩漏 assessment 答案的提示。
+8. CMMU relevant 時作 primary input；補 prerequisites、worked examples、application、English preparation 與 retrieval，不另造平行 MBA 課程。English 整合進 business learning；Thai 維持較輕的 secondary priority；Excel / SQL 只在真實分析脈絡中安排。
+9. 先看固定行程、未完成事項、Review、Work Log 與特殊事件，再決定 Weekly Focus / Question 與 Top 3 Outcomes。Foundation weeks 可用 focus，不必硬湊一個可直接下判斷的 Big Question；JSON 仍沿用 bigQuestion key 以保持相容。
+10. 不犧牲睡眠，不把每天塞滿；保留恢復與不可預期空間。
+11. 90 天只規劃 3–5 份 progressively harder formal works + Capstone；formal assignment 不是每週 KPI。普通 independent practice、retrieval、learning investigation 或 evidence exercise 不建立 Work Log assignment。
+12. AI 可以協助規劃、搜尋、計算、整理與草稿，但 problem framing、evidence judgment、interpretation、recommendation 不外包。
+
+Planner JSON 規則：
+- 日常更新使用 Merge。沒有提供的欄位、日期與既有 blocks = preserve，不得用空陣列假裝不存在的資料。
+- 不要重複輸出 Planner 已知的固定行程，除非該週真的要修改它。
+- 只輸出要新增或更新的日期。
+- block 若是更新既有項目，優先帶既有 id；新 block 可省略 id，Planner 會建立。
+- 要刪除 block 必須明確使用 deleteBlockIds；omission 永遠不代表刪除。
+- 若 Week 1 橫跨兩個 calendar weeks，可輸出 {"weeks":[weekObject1,weekObject2]}，Planner 會一次 Preview / Merge。
+
+單週 schema：
+{"week":"YYYY-MM-DD（該 calendar week 的週一）","bigQuestion":"Weekly Focus / Question；可省略，保留此 key 供舊資料相容","topOutcomes":["可省略"],"note":"可省略","days":{"Mon":[{"id":"更新既有 block 時使用","time":"09:00–10:00","task":"TEACH / MATERIAL / WORKED EXAMPLE / GUIDED PRACTICE / INDEPENDENT PRACTICE / DELAYED RETRIEVAL｜...","area":"Business","note":"Element: ... | Resource: ... | Focus: ... | Output: ... | Time/Scope: ... | Retrieval: ..."}]},"deleteBlockIds":[]}
+
+多週 schema：
+{"weeks":[{單週物件},{單週物件}]}`
+let DATA={weeks:{},goals:structuredClone(DEFAULT_GOALS),prompt:DEFAULT_PROMPT,fixedSchedule:structuredClone(DEFAULT_FIXED),prompts:{}}; let cursor=monday(new Date());
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')} function monday(d){d=new Date(d);d.setHours(12,0,0,0);let x=d.getDay();d.setDate(d.getDate()-(x===0?6:x-1));return d} function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))} function key(){return ymd(cursor)}
+function blankWeek(k=key()){let days={};DOW.forEach(x=>days[x]=(DATA.fixedSchedule?.[x]||[]).map(v=>({id:uid(),time:v[0],task:v[1],area:v[2],note:'',preset:!!v[3],fixed:false,done:false})));return {week:k,bigQuestion:'',topOutcomes:['','',''],outcomeDone:[false,false,false],note:'',days,review:{}}} function W(){if(!DATA.weeks[key()])DATA.weeks[key()]=blankWeek();return DATA.weeks[key()]}
+function save(){localStorage.setItem(KEY,JSON.stringify(DATA))}
+function normalizeData(raw={}){
+  const next={
+    weeks:{},
+    goals:structuredClone(DEFAULT_GOALS),
+    prompt:DEFAULT_PROMPT,
+    fixedSchedule:structuredClone(DEFAULT_FIXED),
+    prompts:structuredClone(DEFAULT_PROMPTS)
+  };
+  if(raw&&typeof raw==='object')Object.assign(next,raw);
+  next.weeks=(next.weeks&&typeof next.weeks==='object')?next.weeks:{};
+  next.goals=Object.assign(structuredClone(DEFAULT_GOALS),(next.goals&&typeof next.goals==='object')?next.goals:{});
+  next.prompt=(typeof next.prompt==='string'&&next.prompt.trim())?next.prompt:DEFAULT_PROMPT;
+  next.fixedSchedule=(next.fixedSchedule&&typeof next.fixedSchedule==='object')?next.fixedSchedule:structuredClone(DEFAULT_FIXED);
+  DOW.forEach(d=>{if(!Array.isArray(next.fixedSchedule[d]))next.fixedSchedule[d]=[]});
+  next.prompts=Object.assign(structuredClone(DEFAULT_PROMPTS),(next.prompts&&typeof next.prompts==='object')?next.prompts:{});
+  Object.keys(DEFAULT_PROMPTS).forEach(k=>{if(typeof next.prompts[k]!=='string')next.prompts[k]=DEFAULT_PROMPTS[k]});
+  Object.values(next.weeks).forEach(w=>DOW.forEach(d=>(w.days?.[d]||[]).forEach(t=>{if(!t.id)t.id=uid()})));
+  return next;
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    DATA=normalizeData(raw?JSON.parse(raw):DATA);
+  }catch(e){DATA=normalizeData(DATA)}
+}
+function area(a){return a||'Focus'} function dateFor(i){let d=new Date(cursor);d.setDate(d.getDate()+i);return d} function flash(id,msg){let e=document.getElementById(id);e.textContent=msg;setTimeout(()=>{if(e.textContent===msg)e.textContent=''},1800)}
+function render(){
+  let w=W(),end=dateFor(6);
+  weekRange.textContent=`${cursor.toLocaleString('en',{month:'short'}).toUpperCase()} ${cursor.getDate()} — ${end.toLocaleString('en',{month:'short'}).toUpperCase()} ${end.getDate()}`;
+  weekLabel.textContent=`Week: ${key()}${w.note?' · '+w.note:''}`;
+  bigQView.textContent=w.bigQuestion||'No Weekly Focus / Question set yet';
+  outcomeView.innerHTML=w.topOutcomes.map((x,i)=>`<div class="outcome ${w.outcomeDone?.[i]?'done':''}" data-out="${i}"><b>${i+1}</b> ${esc(x||'Outcome not set')}</div>`).join('');
+  let tasks=Object.values(w.days).flat(),done=tasks.filter(x=>x.done).length,focus=tasks.filter(x=>!['Work','CMMU','Commute'].includes(x.area)),focusdone=focus.filter(x=>x.done).length;
+  metrics.innerHTML=`<div class="metric"><b>${done}/${tasks.length}</b>Completed<div class="progress"><span style="width:${tasks.length?done/tasks.length*100:0}%"></span></div></div><div class="metric"><b>${focusdone}/${focus.length}</b>Focus Blocks<div class="hint">Excludes work, classes, and commute</div></div><div class="metric"><b>${w.topOutcomes.filter(Boolean).length}/3</b>Outcomes Set<div class="hint">Weekly priority outcomes</div></div>`;
+  let realNow=new Date(),realMon=monday(realNow),isCurrentWeek=ymd(realMon)===key(),now=isCurrentWeek?realNow:new Date(cursor),todayIdx=isCurrentWeek?(now.getDay()+6)%7:0,todayKey=DOW[todayIdx],tomorrowIdx=(todayIdx+1)%7,tomorrowKey=DOW[tomorrowIdx];
+  let todayArr=sortDay(w.days[todayKey]||[]), tomorrowArr=sortDay(w.days[tomorrowKey]||[]);
+  let taskCard=(t,d,j)=>`<label class="dashTask ${t.done?'done':''}"><input type="checkbox" data-check="${d}|${j}" ${t.done?'checked':''}><div class="dashBody"><div class="dashTop"><b>${esc(t.time||'')}</b><em class="tag">${esc(area(t.area))}</em></div><div class="dashName">${esc(t.task||'Untitled')}</div>${t.note?`<div class="dashNote">↳ ${esc(t.note)}</div>`:''}</div></label>`;
+  let actualToday=w.days[todayKey]||[];
+  daysView.innerHTML=`
+    <div class="dashboardToday">
+      <div class="dashEyebrow">${isCurrentWeek?'TODAY':'SELECTED WEEK'} · ${DOWZH[todayIdx]} · ${now.getMonth()+1}/${now.getDate()}</div>
+      <h2>${isCurrentWeek?'Today':'Monday'}</h2>
+      <div class="dashList">${todayArr.length?todayArr.map(t=>taskCard(t,todayKey,actualToday.indexOf(t))).join(''):'<div class="empty">No blocks scheduled for today.</div>'}</div>
+    </div>
+    <div class="dashboardGrid">
+      <div class="dashboardCard"><div class="dashEyebrow">WEEKLY OUTCOMES</div><h3>Weekly Outcomes</h3>${w.topOutcomes.map((x,i)=>`<label class="dashOutcome"><input type="checkbox" data-outcheck="${i}" ${w.outcomeDone?.[i]?'checked':''}><span>${esc(x||'尚未設定')}</span></label>`).join('')}</div>
+      <div class="dashboardCard"><div class="dashEyebrow">WEEKLY FOCUS / QUESTION</div><div class="dashQuestion">${esc(w.bigQuestion||'尚未設定')}</div></div>
+    </div>
+    <div class="dashboardCard">
+      <div class="between"><div><div class="dashEyebrow">WEEKLY PROGRESS</div><h3>Weekly Progress</h3></div><span class="hint">${done}/${tasks.length} blocks</span></div>
+      <div class="dashStats"><div><b>${focusdone}/${focus.length}</b><span>Focus</span></div><div><b>${w.outcomeDone?.filter(Boolean).length||0}/3</b><span>Outcomes</span></div><div><b>${tasks.filter(x=>x.area==='Workout'&&x.done).length}/${tasks.filter(x=>x.area==='Workout').length}</b><span>Workout</span></div></div>
+    </div>
+    <div class="dashboardCard">
+      <div class="dashEyebrow">TOMORROW · ${DOWZH[tomorrowIdx]}</div><h3>Tomorrow Preview</h3>
+      ${tomorrowArr.length?tomorrowArr.map(t=>`<div class="tomorrowItem"><b>${esc(t.time||'')}</b><span>${esc(t.task||'')}</span><em class="tag">${esc(area(t.area))}</em></div>`).join(''):'<div class="empty">No blocks scheduled for tomorrow.</div>'}
+    </div>`;
+  renderPlan();renderFixedSchedule();renderReview();renderGoals();plannerPrompt.value=DATA.prompt
+}
+let EDITING=null,OPENMENU=null;
+function startMinutes(s){let m=String(s||'').match(/(\d{1,2}):(\d{2})/);return m?(+m[1]*60 + +m[2]):9999}
+function sortDay(a){return a.sort((x,y)=>startMinutes(x.time)-startMinutes(y.time))}
+function renderPlan(){let w=W();bigQuestion.value=w.bigQuestion;[out1,out2,out3].forEach((e,i)=>e.value=w.topOutcomes[i]||'');weekNote.value=w.note||'';const areas=['English','Thai','CMMU','Career','Business','Work','Workout','Commute','Life','Rest','Other'];planDays.innerHTML=DOW.map((d,i)=>{sortDay(w.days[d]);return `<div class="editorDay"><div class="between"><b>${DOWZH[i]} · ${dateFor(i).getMonth()+1}/${dateFor(i).getDate()}</b><button class="btn small" data-add="${d}">＋ Block</button></div><div>${(w.days[d]||[]).map((t,j)=>{let id=d+'|'+j;if(EDITING===id)return `<div class="editbox"><div class="editgrid"><input data-f="${d}|${j}|time" value="${esc(t.time||'')}" placeholder="09:00–11:00"><input class="edit-name" data-f="${d}|${j}|task" value="${esc(t.task||'')}" placeholder="Task / Block"><select data-f="${d}|${j}|area">${areas.map(a=>`<option ${a===t.area?'selected':''}>${a}</option>`).join('')}</select><input class="edit-note" data-f="${d}|${j}|note" value="${esc(t.note||'')}" placeholder="What will you do in this block? e.g. Epop listening / case practice (optional)"></div><div class="edit-actions"><button class="btn small" data-canceledit="${id}">Cancel</button><button class="btn small primary" data-doneedit="${id}">Done</button></div></div>`;let open=OPENMENU===id;return `<div class="planrow"><div class="planrow-view" data-toggle="${id}"><div class="planrow-time">${esc(t.time||'Unscheduled')}</div><div class="planrow-body"><div class="planrow-name">${esc(t.task||'Untitled')}</div><div class="planrow-meta"><span class="tag">${esc(area(t.area))}</span>${t.note?`<span class="planrow-sub">↳ ${esc(t.note)}</span>`:''}</div></div></div><button class="planrow-menu" data-toggle="${id}" aria-label="行程選項">•••</button>${open?`<div class="rowmenu"><button data-edit="${id}">Edit</button><button data-dup="${id}">Duplicate</button><button class="danger" data-del="${id}">Delete</button></div>`:''}</div>`}).join('')||'<div class="empty">No blocks yet. Use “＋ Block” to add one.</div>'}</div></div>`}).join('')}
+function renderFixedSchedule(){const areas=['English','Thai','CMMU','Career','Business','Work','Workout','Commute','Life','Rest','Other'];let rows=[];DOW.forEach((d,di)=>(DATA.fixedSchedule[d]||[]).forEach((v,i)=>rows.push(`<div class="fixedrow"><select data-fix="${d}|${i}|day">${DOW.map((x,j)=>`<option value="${x}" ${x===d?'selected':''}>${DOWZH[j]}</option>`).join('')}</select><input data-fix="${d}|${i}|time" value="${esc(v[0]||'')}" placeholder="09:00–10:00"><input class="fixed-task" data-fix="${d}|${i}|task" value="${esc(v[1]||'')}" placeholder="Fixed schedule item"><select class="fixed-area" data-fix="${d}|${i}|area">${areas.map(a=>`<option ${a===(v[2]||'Other')?'selected':''}>${a}</option>`).join('')}</select><button data-fixdel="${d}|${i}" title="刪除">×</button></div>`)));fixedSchedule.innerHTML=rows.join('')||'<div class="fixed-empty">No fixed schedule items yet.</div>'}
+function readFixedSchedule(){let next={};DOW.forEach(d=>next[d]=[]);document.querySelectorAll('[data-fix$="|time"]').forEach(el=>{let[d,i]=el.dataset.fix.split('|'),day=document.querySelector(`[data-fix="${d}|${i}|day"]`).value,time=el.value.trim(),task=document.querySelector(`[data-fix="${d}|${i}|task"]`).value.trim(),ar=document.querySelector(`[data-fix="${d}|${i}|area"]`).value;if(time||task)next[day].push([time,task,ar,1])});DOW.forEach(d=>next[d].sort((a,b)=>startMinutes(a[0])-startMinutes(b[0])));return next}
+function renderReview(){let r=W().review||{};rWin.value=r.win||'';rBlock.value=r.block||'';rCmmu.value=r.cmmu||'';rLang.value=r.lang||'';rEvidence.value=r.evidence||'';rRetrieval.value=r.retrieval||'';rCareer.value=r.career||'';rNext.value=r.next||'';rOther.value=r.other||'';let w=W(),all=Object.values(w.days).flat(),done=all.filter(x=>x.done);reviewAuto.innerHTML=`完成 blocks：<b>${done.length}/${all.length}</b>。Top Outcomes：${w.topOutcomes.map((x,i)=>`${i+1}. ${esc(x||'—')}${w.outcomeDone?.[i]?' ✓':''}`).join('　')}<br>未完成 focus：${all.filter(x=>!['Work','CMMU','Commute'].includes(x.area)&&!x.done).map(x=>esc(x.task)).join('、')||'—'}`}
+function renderGoals(){goalEditors.innerHTML=Object.entries(DATA.goals).map(([k,g])=>`<div class="goal"><h3>${esc(g.title)}</h3><textarea data-goal="${k}">${esc(g.text)}</textarea></div>`).join('')}
+function savePlanData(){let w=W();w.bigQuestion=bigQuestion.value.trim();w.topOutcomes=[out1.value.trim(),out2.value.trim(),out3.value.trim()];w.note=weekNote.value.trim();document.querySelectorAll('[data-f]').forEach(e=>{let[d,i,f]=e.dataset.f.split('|');if(w.days[d]?.[+i])w.days[d][+i][f]=e.value});DOW.forEach(d=>sortDay(w.days[d]));EDITING=null;save();render();flash('planStatus','Saved')}
+function reviewText(){let w=W(),r=w.review||{},all=Object.values(w.days).flat();return `Weekly Review｜${w.week}\nWeekly Focus / Question: ${w.bigQuestion||'—'}\nTop 3: ${w.topOutcomes.map((x,i)=>`${i+1}. ${x||'—'}${w.outcomeDone?.[i]?' ✓':''}`).join('\n')}\nCompleted blocks: ${all.filter(x=>x.done).length}/${all.length}\nUnfinished focus: ${all.filter(x=>!['Work','CMMU','Commute'].includes(x.area)&&!x.done).map(x=>x.task).join('、')||'—'}\n\n真正學會 / closed-book 能說出：${r.win||'—'}\n最大阻力：${r.block||'—'}\nCMMU：${r.cmmu||'—'}\nEnglish / Thai：${r.lang||'—'}\nResearch / Evidence：${r.evidence||'—'}\nDelayed / next-day retrieval：${r.retrieval||'—'}\nCareer / Business：${r.career||'—'}\n下週 reteach / practice / adjustment：${r.next||'—'}\n其他：${r.other||'—'}`}
+function contextText(){return `${reviewText()}\n\nCurrent goals:\n${Object.values(DATA.goals).map(g=>`${g.title}: ${g.text}`).join('\n')}\n\nFixed schedule is already stored in Planner. Please plan the next week using my Planner Prompt and return importable JSON.`}
+function copy(s,id){navigator.clipboard.writeText(s).then(()=>flash(id,'Copied')).catch(()=>flash(id,'Copy failed. Please select the text manually.'))} function download(name,obj){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+function normalizeImported(raw){let k=raw.week||key(),w=blankWeek(k);w.bigQuestion=raw.bigQuestion||'';w.topOutcomes=(raw.topOutcomes||[]).slice(0,3);while(w.topOutcomes.length<3)w.topOutcomes.push('');w.note=raw.note||'';DOW.forEach(d=>{if(Array.isArray(raw.days?.[d]))w.days[d]=raw.days[d].map(x=>({id:x.id||uid(),time:x.time||'',task:x.task||'',area:x.area||'Other',note:x.note||'',preset:!!x.preset,fixed:false,done:!!x.done}))});return w}
+function incomingWeeks(raw){if(Array.isArray(raw?.weeks))return raw.weeks;if(raw?.week)return [raw];throw new Error('A week or weeks object is required')}
+function mergeSummary(raw){let lines=[];incomingWeeks(raw).forEach(p=>{if(!p.week)throw new Error('Each week needs YYYY-MM-DD');let existing=DATA.weeks[p.week];lines.push(`Week ${p.week}${existing?' · merge existing':' · create new'}`);['bigQuestion','topOutcomes','note'].forEach(f=>{if(Object.prototype.hasOwnProperty.call(p,f))lines.push(`  • ${f}: update`)});DOW.forEach(d=>{if(Array.isArray(p.days?.[d])){let ex=existing?.days?.[d]||[],adds=0,updates=0;p.days[d].forEach(x=>{if(x.id&&ex.some(t=>t.id===x.id))updates++;else adds++});lines.push(`  • ${d}: +${adds} / update ${updates}`)}});let del=(p.deleteBlockIds||[]).length;if(del)lines.push(`  • delete blocks: ${del}`);lines.push('  • omitted fields/days: preserved');});return lines.join('\n')}
+function mergeOne(p){let k=p.week;if(!k)throw new Error('week missing');let w=DATA.weeks[k]||blankWeek(k);if(Object.prototype.hasOwnProperty.call(p,'bigQuestion'))w.bigQuestion=p.bigQuestion??'';if(Object.prototype.hasOwnProperty.call(p,'topOutcomes')){w.topOutcomes=(p.topOutcomes||[]).slice(0,3);while(w.topOutcomes.length<3)w.topOutcomes.push('');w.outcomeDone=w.outcomeDone||[false,false,false]}if(Object.prototype.hasOwnProperty.call(p,'note'))w.note=p.note??'';let dels=new Set(p.deleteBlockIds||[]);DOW.forEach(d=>{w.days[d]=w.days[d]||[];if(dels.size)w.days[d]=w.days[d].filter(t=>!dels.has(t.id));if(Array.isArray(p.days?.[d]))p.days[d].forEach(x=>{let idx=x.id?w.days[d].findIndex(t=>t.id===x.id):-1;if(idx>=0){let t=w.days[d][idx];['time','task','area','note','preset','fixed','done'].forEach(f=>{if(Object.prototype.hasOwnProperty.call(x,f))t[f]=x[f]})}else{w.days[d].push({id:x.id||uid(),time:x.time||'',task:x.task||'',area:x.area||'Other',note:x.note||'',preset:!!x.preset,fixed:false,done:!!x.done})}});sortDay(w.days[d])});DATA.weeks[k]=w}
+let PENDING_MERGE=null;
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.tab).classList.add('on');render()});prevWeek.onclick=()=>{cursor.setDate(cursor.getDate()-7);render()};nextWeek.onclick=()=>{cursor.setDate(cursor.getDate()+7);render()};thisWeek.onclick=()=>{cursor=monday(new Date());render()};daysView.onclick=e=>{let c=e.target.closest('[data-check]');if(c){let[d,j]=c.dataset.check.split('|');W().days[d][+j].done=c.checked;save();render()}let o=e.target.closest('[data-out]');if(o){let i=+o.dataset.out;W().outcomeDone=W().outcomeDone||[false,false,false];W().outcomeDone[i]=!W().outcomeDone[i];save();render()}};function syncPlanRows(){let w=W();document.querySelectorAll('[data-f]').forEach(e=>{let[d,i,f]=e.dataset.f.split('|');if(w.days[d]?.[+i])w.days[d][+i][f]=e.value})}
+planDays.onclick=e=>{syncPlanRows();
+if(e.target.closest('[data-add]')){let d=e.target.closest('[data-add]').dataset.add;W().days[d].push({id:uid(),time:'',task:'',area:'Other',note:'',preset:false,fixed:false,done:false});EDITING=d+'|'+(W().days[d].length-1);OPENMENU=null;renderPlan();return}
+let tog=e.target.closest('[data-toggle]');if(tog){let id=tog.dataset.toggle;OPENMENU=OPENMENU===id?null:id;renderPlan();return}
+if(e.target.dataset.edit){EDITING=e.target.dataset.edit;OPENMENU=null;renderPlan();return}
+if(e.target.dataset.canceledit){EDITING=null;renderPlan();return}
+if(e.target.dataset.doneedit){DOW.forEach(d=>sortDay(W().days[d]));EDITING=null;OPENMENU=null;save();render();return}
+if(e.target.dataset.dup){let[d,j]=e.target.dataset.dup.split('|'),t=W().days[d][+j];W().days[d].splice(+j+1,0,{...t,id:uid(),preset:false,done:false});OPENMENU=null;save();render();return}
+if(e.target.dataset.del){let[d,j]=e.target.dataset.del.split('|');W().days[d].splice(+j,1);EDITING=null;OPENMENU=null;save();render();return}
+};
+addFixed.onclick=()=>{DATA.fixedSchedule.Mon=DATA.fixedSchedule.Mon||[];DATA.fixedSchedule.Mon.push(['','','Other',1]);renderFixedSchedule()};fixedSchedule.onclick=e=>{if(e.target.dataset.fixdel){let[d,i]=e.target.dataset.fixdel.split('|');DATA.fixedSchedule[d].splice(+i,1);renderFixedSchedule()}};saveFixed.onclick=()=>{DATA.fixedSchedule=readFixedSchedule();save();renderFixedSchedule();flash('fixedStatus','Fixed schedule saved. New weeks will use this setup.')};
+resetPreset.onclick=()=>{if(confirm('Reset this week to the current fixed schedule? Custom blocks for this week will be cleared.')){let w=W(),fresh=blankWeek(key());w.days=fresh.days;save();render();flash('planStatus','Week schedule reset')}};savePlan.onclick=savePlanData;saveReview.onclick=()=>{let r=W().review||{};Object.assign(r,{win:rWin.value,block:rBlock.value,cmmu:rCmmu.value,lang:rLang.value,evidence:rEvidence.value,retrieval:rRetrieval.value,career:rCareer.value,next:rNext.value,other:rOther.value});W().review=r;save();renderReview();flash('reviewStatus','Saved')};copyReview.onclick=()=>copy(reviewText(),'reviewStatus');saveGoals.onclick=()=>{document.querySelectorAll('[data-goal]').forEach(e=>DATA.goals[e.dataset.goal].text=e.value);save();flash('goalStatus','Saved')};copyPrompt.onclick=()=>copy(DATA.prompt,'copyStatus');savePrompt.onclick=()=>{DATA.prompt=plannerPrompt.value;save();flash('copyStatus','Prompt saved')};resetPrompt.onclick=()=>{DATA.prompt=DEFAULT_PROMPT;save();render();flash('copyStatus','Reset to default')};previewMerge.onclick=()=>{try{let raw=JSON.parse(jsonIn.value);let summary=mergeSummary(raw);PENDING_MERGE=raw;mergePreview.textContent=summary;mergePreview.classList.remove('hidden');confirmMerge.classList.remove('hidden');flash('jsonStatus','Preview ready')}catch(e){PENDING_MERGE=null;mergePreview.classList.add('hidden');confirmMerge.classList.add('hidden');flash('jsonStatus','Invalid JSON: '+e.message)}};
+confirmMerge.onclick=()=>{if(!PENDING_MERGE)return;try{let ws=incomingWeeks(PENDING_MERGE);ws.forEach(mergeOne);save();let last=ws[ws.length-1]?.week;if(last)cursor=monday(new Date(last+'T12:00:00'));PENDING_MERGE=null;mergePreview.classList.add('hidden');confirmMerge.classList.add('hidden');render();flash('jsonStatus','Merge complete')}catch(e){flash('jsonStatus','Merge failed: '+e.message)}};
+cancelMerge.onclick=()=>{PENDING_MERGE=null;mergePreview.classList.add('hidden');confirmMerge.classList.add('hidden');flash('jsonStatus','Cancelled')};
+exportWeek.onclick=()=>download(`Planner_${key()}.json`,W());
+exportAll.onclick=()=>download(`Abby_Planner_Backup_${ymd(new Date())}.json`,DATA);
+importAll.onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json,application/json';i.onchange=()=>{let f=i.files[0],r=new FileReader();r.onload=()=>{try{let incoming=JSON.parse(r.result);if(!incoming||typeof incoming!=='object'||!incoming.weeks)throw new Error('Not a valid Planner backup');if(!confirm('Importing a full backup will replace all current local Planner data. Continue?'))return;DATA=normalizeData(incoming);save();render();initPromptLibrary();flash('jsonStatus','Full backup imported')}catch(e){flash('jsonStatus','Invalid backup: '+e.message)}};r.readAsText(f)};i.click()};
+clearWeek.onclick=()=>{let k=key();if(!confirm(`Clear the plan for ${k}? Custom blocks, completion status, and Weekly Review will be removed, then the current fixed schedule will be reapplied.`))return;DATA.weeks[k]=blankWeek(k);save();render();flash('jsonStatus','This week was cleared and the fixed schedule reapplied')};
+clearAll.onclick=()=>{if(!confirm('Clear ALL Planner data? A Full Backup is recommended first.'))return;if(!confirm('Final confirmation: all weeks, Goals, Prompt settings, Prompt Library, and completion history will be permanently cleared.'))return;localStorage.removeItem(KEY);DATA=normalizeData({});cursor=monday(new Date());save();render();initPromptLibrary();flash('dataStatus','Planner reset')};
+
+const DEFAULT_PROMPTS={
+  dailyExecution:`Daily Execution Mode｜請把我今天的 Planner 具體化成「坐下來就能直接開始」的學習與練習流程。
+
+你會收到我今天的 Planner blocks / day plan。不要重新規劃整週，也不要把今天擴張成新的 curriculum。
+
+請依每個 block 的 Phase 自動切換：
+- Learn → Coach
+- Practice → Coach
+- Work → Boss / Manager
+- Review → Coach + Manager
+
+對每個核心 block，請給我非常具體的執行內容：
+1. Outcome：這個 block 結束時我應該會什麼／交出什麼。
+2. Exact Resource：具體到課程 module / lesson / section / pages / report / chart / video timestamp / CMMU material / 你直接教的 Coach Pack。
+3. Why This Resource：為什麼它最適合今天，而不是 resource dump。
+4. What to Read / Watch / Extract：明確告訴我要看哪一段、注意什麼、記下什麼。
+5. Exercise Sequence：一步一步列出今天要做的練習，包含 worked example / guided practice / independent practice 的順序。
+6. Output：每個練習最後要產出什麼。
+7. Timebox：每一步大概花多久，總量必須符合 Planner 的可用時間。
+8. Stop Rule：做到什麼就停，不要無限 research。
+9. Retrieval：若適合，安排數小時後／睡前的 delayed retrieval，以及隔天 5–15 分鐘 next-day retrieval；不要把剛教完的模仿當 mastery。
+10. English Integration：先把 business thought 想精確，再給 3–5 個真正會用到的 English expressions / sentence structures，並安排口頭輸出。
+11. CMMU Integration：如果我提供的 CMMU material 與今天主題 relevant，優先把它當 primary input；不要另外造一套平行課程。
+12. Research Discipline：若涉及 research，請明確指定 source hierarchy、evidence need、claim 可以說到哪裡、missing information 與 stop rule；時間不夠就縮小問題，不要假裝大題目能在短時間完成。
+13. Tool Rule：Excel / SQL / AI 只有在今天的 business problem 需要時才加入，而且我要能解釋與 audit。
+14. Work Log Rule：普通 Learn / Practice / independent practice 不進 Work Log；只有明確 designated formal work 才使用 Boss / Work Log 流程。
+
+重要：
+- 不要一次丟很多資源。
+- 不要叫我自己再去搜尋教材。
+- 不要只給「看這篇文章、做幾題」這種模糊指令。
+- 我坐下來後應該可以照你的順序直接開始。
+- 如果一個 block 裡適合由你直接教，比外部教材更有效，就直接教，不要為了有連結而硬找資源。
+- Business concept / reasoning 優先於 grammar correction。
+- 若今天有多個 blocks，先排清楚執行順序，但不要改變 Planner 已經定好的時間與核心目標。
+
+以下是今天的 Planner context：`,
+  weeklyPlanning:`Planner mode｜開始本週規劃。
+
+先不要直接輸出 JSON。
+
+請根據：
+1. 90-Day Roadmap
+2. 最新 Master Context
+3. 上週 Planner Review
+4. 最新 Work Log performance evidence
+5. recurring skill gaps / strengths
+6. 本週 CMMU 內容
+7. 我下面提供的 reality
+
+和我一起制定本週：
+- Weekly Learning / Capability Focus（只有適合時才用 Big Question）
+- Top 3 Outcomes
+- Capability Focus
+- Learn → Practice → Work → Review sequence
+- 是否真的需要正式 Assignment；若 prerequisites 尚未建立，改用 Learning Investigation / guided integration
+- realistic workload
+
+先討論與 challenge，不要急著產 JSON。`,
+  coachHelp:`Coach mode，我需要 help。
+
+目前主題：
+[主題]
+
+我目前卡住：
+[卡點]
+
+請先診斷這是 knowledge gap / concept gap / method gap / tool gap / English retrieval-organizing gap / reasoning misconception。
+
+如果尚未學過，Teach First。
+如果已經學過，先 Retrieval → Practice → Challenge。
+
+若這是一個正式 Learning Unit，使用：
+Teaching → Assigned Material → Worked Example → Guided Practice → Independent Practice → Delayed Retrieval。
+
+不要一次丟大量資訊；讓我真的理解並能用。`,
+  guidedPractice:`Practice mode｜請針對今天剛學的內容設計 guided practice。
+
+Topic：
+[主題]
+
+要求：
+- 難度在「剛學過、有點不熟、需要 retrieval」。
+- 不直接跳到正式 Assignment 難度。
+- 先讓我做，再 feedback。
+- 區分「還沒教過」與「教過但沒有 retrieve 出來」。
+- 最後安排 reuse。
+- 若 independent output 不需要立刻完成，安排在數小時後／睡前，並加 next-day retrieval。`,
+  strictAssessment:`不要救我。
+
+這一段是 independent assessment。
+不要：
+- 給答案
+- 給 framework
+- 暗示分析方向
+- 幫我補 conclusion
+- 把問題拆到等於提示答案
+
+你可以：
+- 重述 manager request
+- 回答必要的行政 / deliverable clarification
+- 在我正式提交後 review
+
+直到我說「Coach mode，我需要 help」為止。`,
+  backToBoss:`Back to Boss。
+
+結束 coaching，回到 independent / manager behavior。
+不要再提供答案或 framework，除非我再次切換 Coach mode。`,
+  recordProgress:`記錄一下：
+
+Assignment：
+[Wxx-Axx]
+
+Reality：
+[自然語言描述]
+
+請判斷哪些內容值得進 Work Log。
+普通 execution noise 不要記。
+不要虛構 Reflection。
+只輸出需要更新的最小 Work Log Merge JSON，並用一句話告訴我你決定記錄什麼。`,
+  assignmentSubmission:`Boss mode｜我要提交 Assignment。
+
+Assignment ID：
+[Wxx-Axx]
+
+Submission：
+[貼內容 / 上傳檔案]
+
+請以 Manager 身分 review：
+- 是否回答 Decision Question
+- evidence quality
+- fact / inference / hypothesis discipline
+- analysis logic
+- commercial relevance
+- recommendation quality
+- communication structure
+- English quality（若適用）
+- data/tool reliability（若適用）
+
+請區分：
+1. What Worked
+2. Needs Improvement
+3. Evidence / Reasoning Issues
+4. Communication Issues
+5. Required Revision
+6. Capability Evidence
+7. Status
+
+最後主動附上最小必要 Work Log Merge JSON。
+不要虛構我的 Reflection。`,
+  weeklyReview:`Planner mode｜開始 Weekly Review。
+
+請綜合：
+- 本週 Planner 實際完成狀況
+- Work Log performance evidence
+- Assignment feedback / revision
+- CMMU workload
+- English / Thai execution
+- 我下面的主觀 reality
+
+請整理：
+1. 本週最大成果
+2. 最大阻力 / planning problem
+3. 真正的 Thinking / Skill Gap
+4. 已有 evidence 的進步
+5. 哪些問題只是 knowledge 尚未教到
+6. 哪些問題是已教但 retrieve / apply 失敗
+7. Career / work preference evidence
+8. 下週 training implication
+
+不要直接設計完整下週。先把本週 evidence review 清楚。`,
+  replan:`Planner mode｜本週 reality 改變，需要 replan。
+
+原本已定案的核心目標不要輕易推翻。
+請先判斷：
+1. 哪些 block 只需要移動
+2. 哪些可以縮短
+3. 哪些可以合併
+4. 哪些必須 defer
+5. Assignment deadline 是否真的需要改
+
+Reality change：
+[描述]
+
+優先保護 sleep、本週最重要 capability objective、以及正式 Assignment 的必要 Learn / Practice prerequisite。
+
+確認後輸出 Planner update JSON。`,
+  resourceCuration:`Planner mode｜Resource Curation。
+
+Training objective：
+[目標]
+
+Phase：
+Learn / Practice / Review
+
+Time available：
+[時間]
+
+Task scope：
+[concept retrieval / one chart-table / worked example / 2–3 source synthesis / small research / multi-source analysis]
+
+請替我選「足夠且最值得」的資源，不要給 resource dump。
+
+每個資源說明：
+- Why this
+- Exact section / module
+- How long
+- What I should extract
+- What output follows
+
+如果一個資源就夠，不要給五個。`,
+  cmmuIntegration:`Planner / Coach mode｜整合 CMMU。
+
+本週 CMMU topic / material：
+[貼 topic、syllabus、slides 或檔案]
+
+若與當週 objective 相關，預設把 CMMU material 當 primary input，而不是另找一套教材。
+
+請區分：
+1. 課堂必須懂
+2. Career-relevant concepts
+3. 可以直接拿去 Practice / Assignment reuse 的內容
+4. 不值得額外投入的內容
+
+並說明如何支援 business learning、Executive English 與 upcoming work。`,
+  executiveEnglish:`Coach mode｜Executive English output practice。
+
+Business topic：
+[topic]
+
+Target situation：
+CMMU discussion / presentation / manager briefing / networking / Q&A
+
+先給我問題，不要先給 model answer。
+
+我回答後：
+1. 先看 business thought 是否清楚
+2. 再看 organization
+3. 最後 selective correction English
+4. 只挑最值得改的錯誤
+5. 建立 3–5 個 reusable expressions
+6. 讓我重新回答
+7. 加一個 follow-up challenge，逼我 defend / adjust`,
+  researchSupport:`Research mode｜支援目前的 business task，但不要替我做 judgment。
+
+Decision / Research Question：
+[問題]
+
+請幫我：
+- 把問題縮成 bounded research questions 與 evidence needs
+- 建立 source hierarchy
+- 找可靠 sources
+- 檢查 credibility / recency / geography / population / definition / methodology fit
+- 對重要 claim 做 triangulation
+- 用 Evidence Log 整理 Claim / Evidence / Source / Supports / Does Not Prove / Confidence
+- 指出 missing information
+- 設 stop rule
+- 不把 inference 寫成 fact
+
+先檢查時間是否符合 task scope；若不符合，縮小問題或改成 source pack。`,
+  evidenceAudit:`Boss / Coach hybrid｜Evidence Audit。
+
+以下是我的 claims + evidence：
+[貼內容]
+
+請逐條分類：
+- Supported
+- Partially Supported
+- Unsupported
+- Hypothesis
+- Causal Overreach
+- Needs Better Source
+
+不要先幫我改 conclusion。
+先讓我看到 evidence 到底允許我說到哪裡。
+之後再讓我自己重寫 conclusion。`,
+};
+
+const PROMPT_META=[
+  {key:'weeklyPlanning',title:'Weekly Planning',desc:'Design the week before JSON.'},
+  {key:'coachHelp',title:'Coach Help',desc:'When a concept, method, tool, or reasoning step is unclear.'},
+  {key:'guidedPractice',title:'Guided Practice',desc:'Practice just above current comfort level.'},
+  {key:'strictAssessment',title:'Strict Assessment — 不要救我',desc:'Protect independent assessment.'},
+  {key:'backToBoss',title:'Back to Boss',desc:'Return from coaching to independent work.'},
+  {key:'recordProgress',title:'Record Progress',desc:'Save only meaningful formal-work evidence.'},
+  {key:'assignmentSubmission',title:'Assignment Submission',desc:'Manager review + Work Log merge.'},
+  {key:'weeklyReview',title:'Weekly Review',desc:'Review evidence before planning next week.'},
+  {key:'replan',title:'Replan',desc:'Adjust the week when reality changes.'},
+  {key:'resourceCuration',title:'Resource Curation',desc:'Get exact resources without a resource dump.'},
+  {key:'cmmuIntegration',title:'CMMU Integration',desc:'Use class material as primary input when relevant.'},
+  {key:'executiveEnglish',title:'Executive English',desc:'Business thought first, then selective correction.'},
+  {key:'researchSupport',title:'Research Support',desc:'Build evidence without outsourcing judgment.'},
+  {key:'evidenceAudit',title:'Evidence Audit',desc:'Test how far the evidence really allows the claim to go.'},
+];
+
+function renderPromptLibrary(){
+  const host=document.getElementById('promptLibrary');
+  if(!host)return;
+  host.innerHTML=PROMPT_META.map((p,i)=>`
+    <details class="promptCard">
+      <summary><strong>${esc(p.title)}</strong><span>${esc(p.desc)}</span></summary>
+      <div class="promptBody">
+        <textarea class="promptText" id="libPrompt_${p.key}">${esc(DATA.prompts[p.key]??DEFAULT_PROMPTS[p.key])}</textarea>
+        <div class="promptActions">
+          <button class="btn primary" data-copylib="${p.key}">Copy Prompt</button>
+          <button class="btn" data-savelib="${p.key}">Save</button>
+          <button class="btn" data-resetlib="${p.key}">Reset Default</button>
+        </div>
+        <div class="promptStatus" id="libStatus_${p.key}"></div>
+      </div>
+    </details>`).join('');
+}
+
+function initPromptLibrary(){
+  const d=document.getElementById('dailyPromptText');
+  if(d)d.value=DATA.prompts.dailyExecution??DEFAULT_PROMPTS.dailyExecution;
+  renderPromptLibrary();
+
+  const c1=document.getElementById('copyDailyPrompt');
+  if(c1)c1.onclick=()=>{
+    const ctx=document.getElementById('dailyContext').value.trim();
+    const prompt=document.getElementById('dailyPromptText').value.trim();
+    const full=ctx?`${prompt}\n\n${ctx}`:prompt;
+    copy(full,'dailyPromptStatus');
+  };
+  const c2=document.getElementById('copyDailyPromptOnly');
+  if(c2)c2.onclick=()=>copy(document.getElementById('dailyPromptText').value,'dailyPromptStatus');
+  const sd=document.getElementById('saveDailyPrompt');
+  if(sd)sd.onclick=()=>{
+    DATA.prompts.dailyExecution=document.getElementById('dailyPromptText').value;
+    save();flash('dailyPromptStatus','Saved');
+  };
+  const rd=document.getElementById('resetDailyPrompt');
+  if(rd)rd.onclick=()=>{
+    if(!confirm('Reset Daily Execution Prompt to its default text?'))return;
+    DATA.prompts.dailyExecution=DEFAULT_PROMPTS.dailyExecution;
+    document.getElementById('dailyPromptText').value=DEFAULT_PROMPTS.dailyExecution;
+    save();flash('dailyPromptStatus','Reset to default');
+  };
+
+  const host=document.getElementById('promptLibrary');
+  if(host)host.onclick=e=>{
+    const copyBtn=e.target.closest('[data-copylib]');
+    if(copyBtn){
+      const k=copyBtn.dataset.copylib;
+      copy(document.getElementById(`libPrompt_${k}`).value,`libStatus_${k}`);
+      return;
+    }
+    const saveBtn=e.target.closest('[data-savelib]');
+    if(saveBtn){
+      const k=saveBtn.dataset.savelib;
+      DATA.prompts[k]=document.getElementById(`libPrompt_${k}`).value;
+      save();flash(`libStatus_${k}`,'Saved');
+      return;
+    }
+    const resetBtn=e.target.closest('[data-resetlib]');
+    if(resetBtn){
+      const k=resetBtn.dataset.resetlib;
+      if(!confirm(`Reset ${PROMPT_META.find(x=>x.key===k)?.title||'this prompt'} to its default text?`))return;
+      DATA.prompts[k]=DEFAULT_PROMPTS[k];
+      document.getElementById(`libPrompt_${k}`).value=DEFAULT_PROMPTS[k];
+      save();flash(`libStatus_${k}`,'Reset to default');
+    }
+  };
+}
+
+load();save();render();initPromptLibrary();
+</script></body></html>
