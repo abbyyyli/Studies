@@ -1,0 +1,12 @@
+Learning Hub 更新版
+
+1. 請先在原本 Planner、Knowledge Vault、Work Log 各自匯出 Full Backup。
+2. 解壓縮後，把四份 HTML 放在同一個資料夾，從 index.html 開啟。
+3. 替換現有版本時請維持原本資料夾和檔名，並先保留舊 HTML 副本。
+4. 資料保存在瀏覽器中，不是 HTML 檔案內。換資料夾、瀏覽器或裝置後若看不到資料，請用 JSON 備份還原。iCloud 同步 HTML 不會自動同步瀏覽器資料。
+
+Planner：修正響應式 CSS；即時儲存計畫文字、行程欄位、Review、Goals、Prompts；固定行程欄位變更後儲存。
+Work Log：Archive／Restore、Archived 篩選、輸入 DELETE 才能永久刪除、既有 ID 唯讀、新增 ID 防重複、建立／更新時間與逐欄修改歷史。
+舊紀錄的歷史與時間從使用新版後開始累積，不會重建過去的修改。
+Knowledge Vault：包含先前的手動永久刪除版本，返回連結統一為 Learning Hub。
+localStorage keys 保持原值。
